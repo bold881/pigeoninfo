@@ -63,4 +63,37 @@ export class NewsComponent implements OnInit{
     
     this.getNews(this.dayNow);
   }
+
+  test() {
+
+    if ("WebSocket" in window) {
+      // Let us open a web socket
+      var ws = new WebSocket("ws://localhost:4567/echo");
+
+      ws.onopen = function () {
+        // Web Socket is connected, send data using send()
+        ws.send("Message to send");
+        alert("Message is sent...");
+      };
+
+      ws.onmessage = function (evt) {
+        var received_msg = evt.data;
+        alert("Message is received...");
+      };
+
+      ws.onclose = function () {
+        // websocket is closed.
+        alert("Connection is closed...");
+      };
+
+      window.onbeforeunload = function (event) {
+        ws.close();
+      };
+    }
+
+    else {
+      // The browser doesn't support WebSocket
+      alert("WebSocket NOT supported by your Browser!");
+    }
+  }
 }

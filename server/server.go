@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/gorilla/websocket"
 	"gopkg.in/mgo.v2"
 	"io"
 	"io/ioutil"
@@ -11,6 +12,13 @@ import (
 )
 
 var MGOADDR = "101.200.47.113"
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
 
 type MyHandler struct {
 }
@@ -26,6 +34,9 @@ func (h MyHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			return
 		}
+	} else if req.URL.Path == "/echo" {
+		echo(w, req)
+		return
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 	}
@@ -50,6 +61,32 @@ func newsofDay(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
 	w.Header().Set("Allow", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
 	w.Write(retb)
+}
+
+func echo(w http.ResponseWriter, r *http.Request) {
+	c, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Print("upgrade:", err)
+		return
+	}
+	defer c.Close()
+	for {
+		mt, message, err := c.ReadMessage()
+		if err != nil {
+			log.Println("read:", err)
+			break
+		}
+		log.Printf("recv: %s", message)
+		for {
+			err = c.WriteMessage(mt, message)
+			if err != nil {
+				log.Println("write:", err)
+				break
+			}
+			time.Sleep(time.Second * 5)
+		}
+
+	}
 }
 
 func main() {
