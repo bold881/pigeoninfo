@@ -7,7 +7,7 @@
       <div class="row">
         <div id="list-news">
           <ul class="nav flex-column" *ngIf="news">
-            <li class="nav-item" *ngFor="let item of news">
+            <li class="nav-item" *ngFor="let item of news" (click)="onListNewsClicked(item)">
               <a click="getDetail()" href="#{{item.ID}}" class="list-group-item list-group-item-action list-group-item-light" data-toggle="list"
                 role="tab">{{item.title}}{{item.meta}}</a>
             </li>
@@ -24,8 +24,8 @@
     </div>
 
     <div class="col-7">
-      <div class="tab-content" id="news-detail" *ngIf="news">
-        <div *ngFor="let item of news" class="tab-pane" id="{{item.ID}}" role="tabpanel">{{item.content}}</div>
+      <div class="tab-content" id="news-detail" *ngIf="news" >
+        <div *ngFor="let item of news" class="tab-pane fade" id="{{item.ID}}" role="tabpanel">{{item.content}}</div>
       </div>
     </div>
   </div>
