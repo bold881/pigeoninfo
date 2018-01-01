@@ -21,7 +21,7 @@ type News struct {
 }
 
 func getTimeByStr(s string) (tearly time.Time, tlate time.Time, err error) {
-	t1, err := time.Parse("2006-01-02", s)
+	t1, err := time.Parse("2006-1-2", s)
 	if err != nil {
 		return
 	} else {
@@ -29,7 +29,7 @@ func getTimeByStr(s string) (tearly time.Time, tlate time.Time, err error) {
 	}
 
 	s += " 23:59:59"
-	t2, err := time.Parse("2006-01-02 15:04:05", s)
+	t2, err := time.Parse("2006-1-2 15:04:05", s)
 	if err != nil {
 		return
 	} else {
