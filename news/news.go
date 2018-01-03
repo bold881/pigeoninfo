@@ -8,7 +8,7 @@ import (
 )
 
 var serverAddr = "10.115.0.29"
-var reportPath = "http://10.115.0.134:4567/newsitem"
+var reportPath = "http://101.200.47.113:4567/newsitem"
 
 func save(ch2Save chan PageItem, pIs PageItems, s *mgo.Session) {
 	for {
