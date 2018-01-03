@@ -39,3 +39,7 @@ html, body {
 .btn-secondary {
     width: 70px;
 }
+
+#refresh {
+    cursor: pointer;
+}

@@ -16,9 +16,9 @@ const httpOptions = {
 @Injectable()
 export class NewsService {
 
-  private newsUrl = "http://101.200.47.113:4567/newsofday";
+  private newsUrl = "http://10.115.0.134:4567/newsofday";
 
-  static wsUrl = "ws://localhost:4567/echo";
+  static wsUrl = "ws://10.115.0.134:4567/echo";
 
   @Output() static change: EventEmitter<string> = new EventEmitter();
 

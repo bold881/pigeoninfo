@@ -4,7 +4,7 @@ import (
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
-	"time"
+	//"time"
 )
 
 var upgrader = websocket.Upgrader{
@@ -54,6 +54,6 @@ func broadcastLiteItem() {
 				inServiceClients.Del(ipport)
 			}
 		}
-		time.Sleep(time.Second * 5)
+		//time.Sleep(time.Second * 5)
 	}
 }

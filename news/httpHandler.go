@@ -9,7 +9,6 @@ import (
 
 func reportItem(pi *PageItem) {
 	piLite := pi.ToLite()
-	path := "http://10.115.0.134:4567/newsitem"
 
 	b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(piLite)
@@ -17,7 +16,7 @@ func reportItem(pi *PageItem) {
 	log.Println(b)
 
 	contentType := "application/json; charset=UTF-8"
-	resp, err := http.Post(path, contentType, b)
+	resp, err := http.Post(reportPath, contentType, b)
 	if err == nil {
 		resp.Body.Close()
 	} else {
