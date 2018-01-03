@@ -1,10 +1,13 @@
-import { Component, OnInit, ViewChild, OnChanges, OnDestroy,
-          DoCheck, AfterContentInit, AfterContentChecked, 
-          AfterViewInit, AfterViewChecked, ElementRef } from '@angular/core';
+import {
+  Component, OnInit, ViewChild, OnChanges, OnDestroy,
+  DoCheck, AfterContentInit, AfterContentChecked,
+  AfterViewInit, AfterViewChecked, ElementRef,
+  HostBinding
+} from '@angular/core';
 
 import { MatTableDataSource, MatPaginator, MatSort, } from '@angular/material';
 
-import { News } from '../news';
+import { News, NewsLite } from '../news';
 import { NewsService } from '../news.service';
 
 @Component({
@@ -12,18 +15,26 @@ import { NewsService } from '../news.service';
   templateUrl: './news.component.html',
   styleUrls: ['./news.component.css']
 })
-export class NewsComponent implements OnInit{
+export class NewsComponent implements OnInit {
   news: News[];
   dayNow = '';
   private selectedNews: News;
 
+  @HostBinding('class.is-open')
+  newsLite : NewsLite;
+
   //@ViewChild("news-detail") newsDetail: ElementRef;
 
-  constructor(private newsService: NewsService, private er: ElementRef) {
-  }
+  constructor(private newsService: NewsService, 
+    private er: ElementRef
+  ) {}
 
   ngOnInit() {
     this.getNews('');
+    this.test();
+    NewsService.change.subscribe(d=> {
+      this.newsLite = JSON.parse(d);
+    });
   }
 
   getNews(day): void {
@@ -77,7 +88,15 @@ export class NewsComponent implements OnInit{
         this.er.nativeElement.querySelector('#news-detail').scrollTop = 0;
       } catch (err) {
         console.log(err);
-       }
+      }
     }
+  }
+
+  test() {
+    this.newsService.initNewsWebsocket();
+  }
+
+  onNewsAvailable() {
+    alert("news available");
   }
 }

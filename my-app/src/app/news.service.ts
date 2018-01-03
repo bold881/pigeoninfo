@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { News } from './news';
@@ -18,8 +18,12 @@ export class NewsService {
 
   private newsUrl = "http://101.200.47.113:4567/newsofday";
 
+  static wsUrl = "ws://localhost:4567/echo";
+
+  @Output() static change: EventEmitter<string> = new EventEmitter();
+
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
   ) { }
 
   getNews(day): Observable<News[]> {
@@ -33,6 +37,30 @@ export class NewsService {
       tap(sret => console.log(sret)),
       catchError(this.handleError('getNewses', []))
       );
+  }
+
+  initNewsWebsocket() {
+    if ("WebSocket" in window) {
+      // Let us open a web socket
+      var ws = new WebSocket(NewsService.wsUrl);
+
+      ws.onopen = function () {
+        ws.send("Message to send");
+      };
+
+      ws.onmessage = function (evt) {
+        //var received_msg = evt.data;
+        NewsService.change.emit(evt.data);
+       };
+
+      ws.onclose = function () {
+      };
+
+      window.onbeforeunload = function (event) {
+        ws.close();
+      };
+    } else {
+    }
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

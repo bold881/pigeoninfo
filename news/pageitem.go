@@ -11,6 +11,15 @@ type PageItem struct {
 	content string
 }
 
+type PageItemLite struct {
+	Title string `json:"title"`
+	Meta  string `json:"meta"`
+}
+
+func (pi *PageItem) ToLite() PageItemLite {
+	return PageItemLite{Title: pi.title, Meta: pi.meta}
+}
+
 // struct PageItems
 // methods Find, Add
 type PageItems struct {

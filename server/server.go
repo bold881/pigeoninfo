@@ -1,16 +1,19 @@
 package main
 
 import (
-	"encoding/json"
 	"gopkg.in/mgo.v2"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
 )
 
-var MGOADDR = "101.200.47.113"
+//var
+var (
+	MGOADDR = "101.200.47.113"
+	//MGOADDR          = "10.115.0.29"
+	newsItemLiteChan = make(chan []byte, 1000)
+)
 
 type MyHandler struct {
 }
@@ -26,30 +29,19 @@ func (h MyHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			return
 		}
+	} else if req.URL.Path == "/newsitem" {
+		if req.Method == "POST" {
+			newsItem(w, req)
+		} else {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+	} else if req.URL.Path == "/echo" {
+		servEcho(w, req)
+		return
 	} else {
 		w.WriteHeader(http.StatusNotFound)
 	}
-}
-
-func newsofDay(w http.ResponseWriter, req *http.Request) {
-	bodyBytes, err := ioutil.ReadAll(req.Body)
-	bodyStr := string(bodyBytes)
-	log.Println(bodyStr)
-	news, err := GetNewsOfDay(bodyStr)
-	if err != nil {
-		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-	retb, _ := json.Marshal(news)
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Expose-Headers", "Access-Control-*")
-	w.Header().Set("Access-Control-Allow-Headers", "Access-Control-*, Origin, X-Requested-With, Content-Type, Accept")
-	w.Header().Set("Access-Control-Request-Headers", "X-PINGOTHER, Content-Type")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-	w.Header().Set("Allow", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-	w.Write(retb)
 }
 
 func main() {
@@ -60,6 +52,9 @@ func main() {
 	}
 	session.SetMode(mgo.Monotonic, true)
 	defer session.Close()
+	defer inServiceClients.Clean()
+
+	go broadcastLiteItem()
 
 	var handler MyHandler
 	s := &http.Server{
