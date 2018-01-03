@@ -7,12 +7,16 @@ import (
 	"time"
 )
 
+//var serverAddr = "101.200.47.113"
+var serverAddr = "10.115.0.29"
+
 func save(ch2Save chan PageItem, pIs PageItems, s *mgo.Session) {
 	for {
 		pageItem := <-ch2Save
 		if !MgoSave(s, pageItem) {
 			fmt.Println(pageItem.title, pageItem.meta)
 		}
+		reportItem(&pageItem)
 	}
 }
 
@@ -43,7 +47,7 @@ func main() {
 	//var crawledUrls CrawledURLs
 	crwedUrls.Init()
 
-	session, err := mgo.Dial("101.200.47.113")
+	session, err := mgo.Dial(serverAddr)
 	if err != nil {
 		panic(err)
 	}

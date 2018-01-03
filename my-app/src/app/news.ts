@@ -6,3 +6,8 @@ export class News {
     szurl: string;
     sztime: Date;
 }
+
+export class NewsLite {
+    title: string;
+    meta: string;
+}

@@ -51,58 +51,6 @@ func checkUrl(szurl string) bool {
 	return false
 }
 
-// Extract all http** links from a given webpage
-// func Crawl(szurl string, chPI chan PageItem, ch2Crawl chan string, crwedUrls CrawledURLs) {
-// 	// check szurl processed or not allowed
-// 	if crwedUrls.Check(szurl) || !checkUrl(szurl) {
-// 		return
-// 	}
-
-// 	resp, err := http.Get(szurl)
-
-// 	crwedUrls.Add(szurl)
-
-// 	if err != nil {
-// 		fmt.Println("ERROR: Failed to crawl \"" + szurl + "\"" + err.Error())
-// 		return
-// 	}
-
-// 	b := resp.Body
-// 	defer b.Close() // close Body when the function returns
-
-// 	z := html.NewTokenizer(b)
-
-// 	for {
-// 		tt := z.Next()
-
-// 		switch {
-// 		case tt == html.ErrorToken:
-// 			return
-// 		case tt == html.StartTagToken:
-// 			t := z.Token()
-// 			if t.Data == "a" {
-// 				ok, szurl := getHref(t)
-// 				if !ok {
-// 					continue
-// 				}
-// 				if checkUrl(szurl) {
-// 					if !crwedUrls.Check(szurl) {
-// 						ch2Crawl <- szurl
-// 					}
-// 				}
-// 			} else if t.Data == "div" {
-// 				ok := getDivText(t, targetClass)
-// 				if ok {
-// 					bytes, _ := ioutil.ReadAll(b)
-// 					fmt.Println(string(bytes))
-// 					var pi = PageItem{szurl, string(z.Text())}
-// 					chPI <- pi
-// 				}
-// 			}
-// 		}
-// 	}
-// }
-
 func ExampleScrape() {
 	doc, err := goquery.NewDocument("http://www.cq.xinhuanet.com/2017-12/10/c_1122086150.htm")
 	if err != nil {

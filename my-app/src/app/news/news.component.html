@@ -1,6 +1,13 @@
 <div class="container-fluid">
   <div class="row" id="page-header">
-    <h3>{{dayNow}}</h3>
+    <div class="col-3">
+      <h3>{{dayNow}}</h3>
+    </div>
+    <div class="col-9">
+      <a href="#" class="badge badge-light">
+        {{newsLite.title}} {{newsLite.meta}}
+      </a>
+    </div>
   </div>
   <div class="row" id="page-body">
     <div class="col-5">
@@ -21,11 +28,10 @@
           <button type="button" class="btn btn-secondary" (click)="onNextClick()"> Next </button>
         </div>
       </div>
-      <button type="button" (click)="test()">test</button>
     </div>
 
     <div class="col-7">
-      <div class="tab-content" id="news-detail" *ngIf="news" >
+      <div class="tab-content" id="news-detail" *ngIf="news">
         <div *ngFor="let item of news" class="tab-pane fade" id="{{item.ID}}" role="tabpanel">{{item.content}}</div>
       </div>
     </div>

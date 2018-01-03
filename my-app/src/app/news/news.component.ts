@@ -1,10 +1,13 @@
-import { Component, OnInit, ViewChild, OnChanges, OnDestroy,
-          DoCheck, AfterContentInit, AfterContentChecked, 
-          AfterViewInit, AfterViewChecked, ElementRef } from '@angular/core';
+import {
+  Component, OnInit, ViewChild, OnChanges, OnDestroy,
+  DoCheck, AfterContentInit, AfterContentChecked,
+  AfterViewInit, AfterViewChecked, ElementRef,
+  HostBinding
+} from '@angular/core';
 
 import { MatTableDataSource, MatPaginator, MatSort, } from '@angular/material';
 
-import { News } from '../news';
+import { News, NewsLite } from '../news';
 import { NewsService } from '../news.service';
 
 @Component({
@@ -12,18 +15,26 @@ import { NewsService } from '../news.service';
   templateUrl: './news.component.html',
   styleUrls: ['./news.component.css']
 })
-export class NewsComponent implements OnInit{
+export class NewsComponent implements OnInit {
   news: News[];
   dayNow = '';
   private selectedNews: News;
 
+  @HostBinding('class.is-open')
+  newsLite : NewsLite;
+
   //@ViewChild("news-detail") newsDetail: ElementRef;
 
-  constructor(private newsService: NewsService, private er: ElementRef) {
-  }
+  constructor(private newsService: NewsService, 
+    private er: ElementRef
+  ) {}
 
   ngOnInit() {
     this.getNews('');
+    this.test();
+    NewsService.change.subscribe(d=> {
+      this.newsLite = JSON.parse(d);
+    });
   }
 
   getNews(day): void {
@@ -77,37 +88,15 @@ export class NewsComponent implements OnInit{
         this.er.nativeElement.querySelector('#news-detail').scrollTop = 0;
       } catch (err) {
         console.log(err);
-       }
+      }
     }
   }
-  
+
   test() {
-    if ("WebSocket" in window) {
-      // Let us open a web socket
-      var ws = new WebSocket("ws://localhost:4567/echo");
+    this.newsService.initNewsWebsocket();
+  }
 
-      ws.onopen = function () {
-        // Web Socket is connected, send data using send()
-        ws.send("Message to send");
-        alert("Message is sent...");
-      };
-
-      ws.onmessage = function (evt) {
-        var received_msg = evt.data;
-        alert("Message is received...");
-      };
-
-      ws.onclose = function () {
-        // websocket is closed.
-        alert("Connection is closed...");
-      };
-
-      window.onbeforeunload = function (event) {
-        ws.close();
-      };
-    } else {
-      // The browser doesn't support WebSocket
-      alert("WebSocket NOT supported by your Browser!");
-    }
+  onNewsAvailable() {
+    alert("news available");
   }
 }
