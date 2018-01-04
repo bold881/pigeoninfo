@@ -87,9 +87,9 @@ export class NewsComponent implements OnInit {
   }
 
   onListNewsClicked(item: News) {
-    console.log(item);
     if (item) {
       this.selectedNews = item;
+      this.newsReformat(item);
       try {
         this.er.nativeElement.querySelector('#news-detail').scrollTop = 0;
       } catch (err) {
@@ -106,7 +106,8 @@ export class NewsComponent implements OnInit {
     this.newsLite = {title:"", meta:""};
     this.getNews(this.dayNow);
   }
-
+  
+  // get year-month-day from given Date
   getDayFromDate(dd: Date) {
     if (dd) {
       var m, d;
@@ -124,6 +125,7 @@ export class NewsComponent implements OnInit {
     }
   }
 
+  // get 年月日from given Date
   getChineseDayFromDate(dd: Date) {
     if (dd) {
       var m, d;
@@ -139,5 +141,24 @@ export class NewsComponent implements OnInit {
       
       return dd.getFullYear() + '年' + m + '月' + d  + '日';
     }
+  }
+
+  // reformat news content 
+  newsReformat(item: News) {
+    item.content = this.strReformat(item.content, /\s{2}/);
+    item.content = this.strReformat(item.content, /\s{4}/);
+  }
+
+  strReformat(content, target) {
+    var arr = content.split(target);
+    var i = 0;
+    var text = "";
+    for(; i < arr.length; i++) {
+      text += "<p>" + arr[i] + "</p>";
+    }
+    if(text) {
+      return text;
+    }
+    return content;
   }
 }

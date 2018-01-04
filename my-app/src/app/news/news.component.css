@@ -43,3 +43,7 @@ html, body {
 #refresh {
     cursor: pointer;
 }
+
+.tab-content-item {
+    text-align: left;
+}

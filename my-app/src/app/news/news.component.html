@@ -32,7 +32,7 @@
 
     <div class="col-7">
       <div class="tab-content" id="news-detail" *ngIf="news">
-        <div *ngFor="let item of news" class="tab-pane fade" id="{{item.ID}}" role="tabpanel">{{item.content}}</div>
+        <div *ngFor="let item of news" class="tab-pane fade tab-content-item" id="{{item.ID}}" role="tabpanel" [innerHTML]="item.content"></div>
       </div>
     </div>
   </div>
