@@ -1,7 +1,12 @@
 <div class="container-fluid">
   <div class="row" id="page-header">
     <div class="col-5">
-      <h5>{{dayNow}}</h5>
+      <div class="row">
+        <h5>pigeoninfo</h5>
+      </div>
+      <div class="row">
+        {{dayNow}}
+      </div>
     </div>
     <div class="col-7">
       <a class="badge badge-light" (click)="onNewsAvailable()" *ngIf="newsLite" id="refresh" >
