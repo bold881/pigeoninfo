@@ -8,7 +8,6 @@ import (
 	"time"
 )
 
-//var
 var (
 	//MGOADDR = "101.200.47.113"
 	MGOADDR          = "10.115.0.29"
@@ -20,6 +19,7 @@ type MyHandler struct {
 
 func (h MyHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	log.Println(req.RemoteAddr + " " + req.URL.Path)
+	runninglog.logs = append(runninglog.logs, req.RemoteAddr+" "+req.URL.Path)
 	if req.URL.Path == "/" {
 		io.WriteString(w, "hello world!\n")
 	} else if req.URL.Path == "/newsofday" {
@@ -55,6 +55,8 @@ func main() {
 	defer inServiceClients.Clean()
 
 	go broadcastLiteItem()
+
+	go logProcess()
 
 	var handler MyHandler
 	s := &http.Server{

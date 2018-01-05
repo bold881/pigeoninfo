@@ -21,6 +21,7 @@ func servEcho(w http.ResponseWriter, r *http.Request) {
 	c, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println("upgrade:", err)
+		runninglog.logs = append(runninglog.logs, err.Error())
 		return
 	}
 
@@ -51,6 +52,7 @@ func broadcastLiteItem() {
 			err := conn.pConn.WriteMessage(websocket.TextMessage, item)
 			if err != nil {
 				log.Println(err)
+				runninglog.logs = append(runninglog.logs, err.Error())
 				inServiceClients.Del(ipport)
 			}
 		}

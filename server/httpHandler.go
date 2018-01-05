@@ -12,6 +12,7 @@ func newsofDay(w http.ResponseWriter, req *http.Request) {
 	bodyBytes, err := ioutil.ReadAll(req.Body)
 	bodyStr := string(bodyBytes)
 	log.Println(bodyStr)
+	runninglog.logs = append(runninglog.logs, bodyStr)
 	news, err := GetNewsOfDay(bodyStr)
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -41,6 +42,7 @@ func newsItem(w http.ResponseWriter, req *http.Request) {
 		newsItemLiteChan <- bodyBytes
 	} else {
 		log.Println(err)
+		runninglog.logs = append(runninglog.logs, err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
