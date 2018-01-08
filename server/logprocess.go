@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"log"
+	"net"
 	"net/smtp"
 	"sync"
 	"time"
@@ -16,6 +17,10 @@ type LogSet struct {
 
 var (
 	runninglog LogSet
+	servername = "smtp.qq.com:465"
+	username   = "970778418@qq.com"
+	password   = ""
+	recever    = "970778418@qq.com"
 )
 
 // send logs by eamil
@@ -27,16 +32,16 @@ func logProcess() {
 		if err != nil {
 			log.Println(err)
 		}
-		if !(tnow.Hour() > 23 && tnow.Minute() > 30) {
-
-			log.Println(t.Sub(tnow))
-			time.Sleep(t.Sub(tnow))
-
+		if tnow.Hour() == 23 && tnow.Minute() >= 30 {
 			msg := getEmailMsg(runninglog.logs)
 			if msg != nil {
 				mailsend(msg)
 			}
+		} else {
+			log.Println(t.Sub(tnow))
+			time.Sleep(t.Sub(tnow))
 		}
+
 		tthen := time.Now()
 		if tthen.Day() == tnow.Day() && tthen.Hour() == tnow.Hour() {
 			tnext := t.AddDate(0, 0, 1)
@@ -47,23 +52,29 @@ func logProcess() {
 
 // send eamil
 func mailsend(msg []byte) bool {
-	c, err := smtp.Dial("mail.yonyou.com:25")
+
+	host, _, _ := net.SplitHostPort(servername)
+	cfg := &tls.Config{ServerName: host, InsecureSkipVerify: true}
+	conn, err := tls.Dial("tcp", servername, cfg)
 	if err != nil {
 		log.Println(err)
 		return false
 	}
 
-	cfg := &tls.Config{ServerName: "", InsecureSkipVerify: true}
-	c.StartTLS(cfg)
-
-	auth := smtp.PlainAuth("", "", "", "")
-	c.Auth(auth)
-
-	if err := c.Mail(""); err != nil {
+	c, err := smtp.NewClient(conn, host)
+	if err != nil {
 		log.Println(err)
 		return false
 	}
-	if err := c.Rcpt(""); err != nil {
+
+	auth := smtp.PlainAuth("", username, password, host)
+	c.Auth(auth)
+
+	if err := c.Mail(username); err != nil {
+		log.Println(err)
+		return false
+	}
+	if err := c.Rcpt(recever); err != nil {
 		log.Println(err)
 		return false
 	}
@@ -101,7 +112,8 @@ func getEmailMsg(logs []string) []byte {
 	}
 	tnow := time.Now()
 	title := fmt.Sprintf("%d-%d-%d RUNNING REPORT", tnow.Year(), tnow.Month(), tnow.Day())
-	msg := ("To: 970778418@qq.com\r\n" +
+	msg := ("To: " + recever + "\r\n" +
+		"From: " + username + "\r\n" +
 		"Subject: " + title + "\r\n" +
 		"\r\n")
 
