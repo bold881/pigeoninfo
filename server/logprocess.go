@@ -19,7 +19,7 @@ var (
 	runninglog LogSet
 	servername = "smtp.qq.com:465"
 	username   = "970778418@qq.com"
-	password   = "yjbukjjgndsmbbif"
+	password   = ""
 	recever    = "970778418@qq.com"
 )
 
