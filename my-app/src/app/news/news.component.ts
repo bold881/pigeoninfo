@@ -119,6 +119,8 @@ export class NewsComponent implements OnInit {
       var td = dd.getDate();
       if (td < 10) {
         d = '0' + td;
+      } else {
+        d = td;
       }
       
       return dd.getFullYear() + '-' + m + '-' + d;
@@ -137,6 +139,8 @@ export class NewsComponent implements OnInit {
       var td = dd.getDate();
       if (td < 10) {
         d = '0' + td;
+      } else {
+        d = td;
       }
       
       return dd.getFullYear() + '年' + m + '月' + d  + '日';

@@ -6,6 +6,7 @@ import (
 	//"gopkg.in/mgo.v2/bson"
 	"hash/fnv"
 	"log"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -19,7 +20,14 @@ type News struct {
 	Time    time.Time
 }
 
-var session mgo.Session
+var (
+	session    mgo.Session
+	timeregexp *regexp.Regexp
+)
+
+func init() {
+	timeregexp = regexp.MustCompile(`\d{4}-(\d{2}|\d)-(\d{2}|\d) ([01]?[0-9]|2[0-3]):[0-5][0-9]`)
+}
 
 func hash(s string) uint64 {
 	h := fnv.New64a()
@@ -46,6 +54,15 @@ func Clean(session *mgo.Session) {
 }
 
 func string2Time(rawstr string) time.Time {
+	if tmpstr := timeregexp.FindString(rawstr); tmpstr != "" {
+		t, err := time.Parse("2006-01-02 15:04", tmpstr)
+		if err == nil {
+			return t
+		} else {
+			return time.Now()
+		}
+	}
+
 	var strarr []string
 	if strings.Contains(rawstr, "来源") {
 		strarr = strings.Split(rawstr, "来源")
