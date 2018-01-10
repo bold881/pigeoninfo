@@ -9,8 +9,7 @@ import (
 )
 
 var (
-	MGOADDR = "101.200.47.113"
-	//MGOADDR          = "10.115.0.29"
+	MGOADDR          = "127.0.0.1"
 	newsItemLiteChan = make(chan []byte, 1000)
 )
 

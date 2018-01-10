@@ -86,7 +86,12 @@ func (p *CQQQObj) pageProcess(szurl string, doc *goquery.Document, chPI chan Pag
 		if meta == "" {
 			log.Println("meta empty" + szurl)
 		}
-		content := s.Find(".Cnt-Main-Article-QQ").Find("p").Children().Remove().End().Text()
+		var content string
+		s.Find(".Cnt-Main-Article-QQ").Find("p").Children().Remove().End().Each(func(j int, js *goquery.Selection) {
+			if tmpTxt := js.Text(); tmpTxt != "" {
+				content += js.Text() + "<br />"
+			}
+		})
 		if content == "" {
 			log.Println("content empty" + szurl)
 		}
