@@ -42,6 +42,8 @@ export class NewsComponent implements OnInit {
       
       if(tmp.meta.includes(this.dayNowChinese)) {
         this.newsLite = JSON.parse(d);
+      } else if (tmp.meta.includes(this.dayNow)) {
+        this.newsLite = JSON.parse(d);
       }
     });
   }
