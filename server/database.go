@@ -50,9 +50,28 @@ func GetNewsOfDay(t string) ([]News, error) {
 	var results []News
 	tearly, tlate, _ := getTimeByStr(t)
 	m := bson.M{"time": bson.M{"$gte": tearly, "$lte": tlate}}
-	err := c.Find(m).All(&results)
+	err := c.Find(m).Sort("-time").All(&results)
 	if err != nil {
 		panic(err)
 	}
 	return results, nil
+}
+
+func GetNewsDetail(id string) (News, error) {
+	var result News
+	if session == nil {
+		return result, errors.New("database session not initialized")
+	}
+	cs := session.Copy()
+	defer cs.Close()
+
+	c := cs.DB("pigeoninfo").C("news")
+
+	err := c.FindId(bson.ObjectIdHex(id)).One(&result)
+	// m := bson.M{"_id": bson.ObjectIdHex{id}}
+	// err := c.Find(m).One(&result)
+	if err != nil {
+		panic(err)
+	}
+	return result, nil
 }

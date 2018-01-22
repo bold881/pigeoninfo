@@ -16,8 +16,9 @@ const httpOptions = {
 @Injectable()
 export class NewsService {
 
-  private newsUrl = "http://127.0.0.1:4567/newsofday";
-  static wsUrl = "ws://127.0.0.1:4567/echo";
+  private newsUrl = "http://10.115.0.134:4567/newsofday";
+  private newsDetailUrl = "http://10.115.0.134:4567/newsdetail";
+  static wsUrl = "ws://10.115.0.134:4567/echo";
 
   @Output() static change: EventEmitter<string> = new EventEmitter();
 
@@ -36,6 +37,16 @@ export class NewsService {
       tap(sret => console.log(sret)),
       catchError(this.handleError('getNewses', []))
       );
+  }
+
+  getNewsDetail(id: string): Observable<News>{
+    if(!id) {
+      return;
+    }
+    return this.http.post<News>(this.newsDetailUrl,id,httpOptions).pipe(
+      tap(sret => console.log(sret)),
+      catchError(this.handleError<News>(`getNewsDetail id=${id}`))
+    );
   }
 
   initNewsWebsocket() {

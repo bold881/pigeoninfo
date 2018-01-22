@@ -58,7 +58,10 @@ export class NewsComponent implements OnInit {
       .subscribe(
       newses => {
         if (newses) {
-          this.news = newses.reverse();
+          newses.forEach(function(item) {
+            item.content = item.content.substring(0, 200);
+          });
+          this.news = newses;
         }
       }
       );
@@ -91,7 +94,7 @@ export class NewsComponent implements OnInit {
   onListNewsClicked(item: News) {
     if (item) {
       this.selectedNews = item;
-      this.newsReformat(item);
+      //NewsComponent.newsReformat(item);
       try {
         this.er.nativeElement.querySelector('#news-detail').scrollTop = 0;
       } catch (err) {
@@ -147,24 +150,5 @@ export class NewsComponent implements OnInit {
       
       return dd.getFullYear() + '年' + m + '月' + d  + '日';
     }
-  }
-
-  // reformat news content 
-  newsReformat(item: News) {
-    item.content = this.strReformat(item.content, /\s{2}/);
-    item.content = this.strReformat(item.content, /\s{4}/);
-  }
-
-  strReformat(content, target) {
-    var arr = content.split(target);
-    var i = 0;
-    var text = "";
-    for(; i < arr.length; i++) {
-      text += "<p>" + arr[i] + "</p>";
-    }
-    if(text) {
-      return text;
-    }
-    return content;
   }
 }

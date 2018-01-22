@@ -1,44 +1,16 @@
-<div class="container-fluid">
-  <div class="row" id="page-header">
-    <div class="col-5">
-      <div class="row">
-        <h5>pigeoninfo</h5>
-      </div>
-      <div class="row">
-        {{dayNow}}
-      </div>
-    </div>
-    <div class="col-7">
-      <a class="badge badge-light" (click)="onNewsAvailable()" *ngIf="newsLite" id="refresh" >
-        {{newsLite.title}} {{newsLite.meta}}
-      </a>
-    </div>
-  </div>
-  <div class="row" id="page-body">
-    <div class="col-5">
-      <div class="row">
-        <div id="list-news">
-          <ul class="nav flex-column" *ngIf="news">
-            <li class="nav-item" *ngFor="let item of news" (click)="onListNewsClicked(item)">
-              <a click="getDetail()" href="#{{item.ID}}" class="list-group-item list-group-item-action list-group-item-light" data-toggle="list"
-                role="tab">{{item.title}}{{item.meta}}</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="row" id="list-news-foot">
-        <div id="nav-group" class="btn-group btn-group-sm" role="group" aria-label="page navigation small button group">
-          <button type="button" class="btn btn-secondary" (click)="onPreviousClick()">Previous</button>
-          <button type="button" class="btn btn-secondary" (click)="onNextClick()"> Next </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-7">
-      <div class="tab-content" id="news-detail" *ngIf="news">
-        <div *ngFor="let item of news" class="tab-pane fade tab-content-item" id="{{item.ID}}" role="tabpanel" [innerHTML]="item.content"></div>
-      </div>
-    </div>
+<div class="news-light">
+  <a class="badge badge-light" (click)="onNewsAvailable()" *ngIf="newsLite" id="refresh" >
+    {{newsLite.title}} {{newsLite.meta}}
+  </a>
+</div>
+<div class="card news-card rounded-0" *ngFor="let item of news">
+  <div class="card-body">
+    <a href="/news-detail/{{item.ID}}" class="card-title">{{item.title}}</a>
+    <p class="card-text news-content" [innerHTML]="item.content"></p>
+    <footer class="blockquote-footer">
+        <small class="text-muted">
+          {{item.meta}}
+        </small>
+    </footer>
   </div>
 </div>

@@ -1,49 +1,24 @@
-html, body {
-    margin: 0;
-    overflow: hidden;
-    height: 100%;
-}
-
-#list-news {
-    height: calc(100vh-120px);
-    max-height: calc(100vh - 120px);
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-#news-detail {
-    height: calc(100vh - 60px);
-    max-height: calc(100vh - 60px);
-    overflow-y: auto;
-    text-align: center;
-}
-
-#page-header {
-    height:60px;
-    align-items: center;
-}
-
-#list-news-foot {
-    height:60px;
-}
-
-.btn-group-sm {
-    height:31px;
-}
-
-#nav-group {
-    position: absolute;
-    right: 0;
-}
-
-.btn-secondary {
-    width: 70px;
-}
-
 #refresh {
     cursor: pointer;
 }
 
 .tab-content-item {
     text-align: left;
+}
+
+div.news-card {
+    max-width: 50rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0.5rem;
+}
+
+div.news-card-link {
+    text-align: right;
+}
+
+div.news-light {
+    max-width: 50rem;
+    margin-left: auto;
+    margin-right: auto;
 }

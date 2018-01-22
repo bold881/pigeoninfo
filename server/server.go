@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	MGOADDR          = "127.0.0.1"
+	MGOADDR          = "101.200.47.113"
 	newsItemLiteChan = make(chan []byte, 1000)
 )
 
@@ -24,6 +24,13 @@ func (h MyHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	} else if req.URL.Path == "/newsofday" {
 		if req.Method == "POST" {
 			newsofDay(w, req)
+		} else {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+	} else if req.URL.Path == "/newsdetail" {
+		if req.Method == "POST" {
+			newsDetail(w, req)
 		} else {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			return
