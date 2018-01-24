@@ -15,10 +15,11 @@ const httpOptions = {
 
 @Injectable()
 export class NewsService {
-
-  private newsUrl = "http://10.115.0.134:4567/newsofday";
-  private newsDetailUrl = "http://10.115.0.134:4567/newsdetail";
-  static wsUrl = "ws://10.115.0.134:4567/echo";
+  private serverAddr = "http://192.168.8.150:4567"
+  private newsUrl = "/newsofday";
+  private newsDetailUrl = "/newsdetail";
+  private newsOfLimit = "/newsoflimit"
+  static wsUrl = "ws://192.168.8.150:4567/echo";
 
   @Output() static change: EventEmitter<string> = new EventEmitter();
 
@@ -30,7 +31,7 @@ export class NewsService {
     if (!day) {
       return
     }
-    return this.http.post<News[]>(this.newsUrl,
+    return this.http.post<News[]>(this.serverAddr + this.newsUrl,
       day,
       httpOptions)
       .pipe(
@@ -39,14 +40,22 @@ export class NewsService {
       );
   }
 
-  getNewsDetail(id: string): Observable<News>{
-    if(!id) {
+  getNewsDetail(id: string): Observable<News> {
+    if (!id) {
       return;
     }
-    return this.http.post<News>(this.newsDetailUrl,id,httpOptions).pipe(
+    return this.http.post<News>(this.serverAddr + this.newsDetailUrl, id, httpOptions).pipe(
       tap(sret => console.log(sret)),
       catchError(this.handleError<News>(`getNewsDetail id=${id}`))
     );
+  }
+
+  getNewsOfLimit(d: string): Observable<News[]> {
+    return this.http.post<News[]>(this.serverAddr + this.newsOfLimit, d, httpOptions)
+      .pipe(
+      tap(sret => console.log(sret)),
+      catchError(this.handleError('getNewsesOfLimit', []))
+      );
   }
 
   initNewsWebsocket() {
@@ -61,7 +70,7 @@ export class NewsService {
       ws.onmessage = function (evt) {
         //var received_msg = evt.data;
         NewsService.change.emit(evt.data);
-       };
+      };
 
       ws.onclose = function () {
       };

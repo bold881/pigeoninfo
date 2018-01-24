@@ -35,6 +35,13 @@ func (h MyHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			return
 		}
+	} else if req.URL.Path == "/newsoflimit" {
+		if req.Method == "POST" {
+			newsofLimit(w, req)
+		} else {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
 	} else if req.URL.Path == "/newsitem" {
 		if req.Method == "POST" {
 			newsItem(w, req)

@@ -75,3 +75,37 @@ func GetNewsDetail(id string) (News, error) {
 	}
 	return result, nil
 }
+
+func parseTime(s string) (t2 time.Time, err error) {
+	t2, err = time.Parse("2006-01-02T15:04:05-07:00", s)
+	return
+}
+
+func GetNewsOfLimit(ts string) ([]News, error) {
+	if session == nil {
+		return nil, errors.New("database session not initialized")
+	}
+	cs := session.Copy()
+	defer cs.Close()
+
+	c := cs.DB("pigeoninfo").C("news")
+
+	var results []News
+	//tearly, tlate, _ := getTimeByStr(t)
+
+	var err error
+	if ts == "" {
+		iter := c.Find(nil).Sort("-time").Limit(25).Iter()
+		err = iter.All(&results)
+	} else {
+		tlate, _ := parseTime(ts)
+		m := bson.M{"time": bson.M{"$lte": tlate}}
+		iter := c.Find(m).Sort("-time").Limit(25).Iter()
+		err = iter.All(&results)
+	}
+
+	if err != nil {
+		panic(err)
+	}
+	return results, nil
+}

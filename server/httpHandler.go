@@ -50,7 +50,7 @@ func newsDetail(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
 	w.Header().Set("Allow", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
 	w.Write(retb)
-}
+} 
 
 // notify incoming news item
 func newsItem(w http.ResponseWriter, req *http.Request) {
@@ -69,4 +69,27 @@ func newsItem(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusOK)
+}
+
+// get news by time stamp
+func newsofLimit(w http.ResponseWriter, req *http.Request) {
+	bodyBytes, err := ioutil.ReadAll(req.Body)
+	bodyStr := string(bodyBytes)
+	log.Println(bodyStr)
+	runninglog.logs = append(runninglog.logs, bodyStr)
+	news, err := GetNewsOfLimit(bodyStr)
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	retb, _ := json.Marshal(news)
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Expose-Headers", "Access-Control-*")
+	w.Header().Set("Access-Control-Allow-Headers", "Access-Control-*, Origin, X-Requested-With, Content-Type, Accept")
+	w.Header().Set("Access-Control-Request-Headers", "X-PINGOTHER, Content-Type")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	w.Header().Set("Allow", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	w.Write(retb)
 }
