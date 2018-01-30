@@ -162,7 +162,7 @@ export class NewsComponent implements OnInit {
 
   getMoreData() {
     var ts;
-    if (this.news) {
+    if (this.news && this.news.length > 0) {
       ts = this.news[this.news.length - 1].sztime;
     } else {
       ts = "";
