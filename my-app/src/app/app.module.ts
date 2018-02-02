@@ -12,6 +12,7 @@ import { BrowserAnimationBuilder } from '@angular/platform-browser/animations/sr
 import { NewsService } from './news.service';
 import { AppRoutingModule } from './/app-routing.module';
 import { NewsDetailComponent } from './news-detail/news-detail.component';
+import { SearchComponent } from './search/search.component';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { NewsDetailComponent } from './news-detail/news-detail.component';
     AppComponent,
     NewsComponent,
     NewsDetailComponent,
+    SearchComponent,
   ],
   imports: [
     BrowserModule,

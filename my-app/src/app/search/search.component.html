@@ -1,0 +1,11 @@
+<div class="card news-card rounded-0" *ngFor="let item of news">
+  <div class="card-body">
+    <a href="/news-detail/{{item.ID}}" class="card-title">{{item.title}}</a>
+    <p class="card-text news-content" [innerHTML]="item.content"></p>
+    <footer class="blockquote-footer">
+        <small class="text-muted">
+          {{item.meta}}
+        </small>
+    </footer>
+  </div>
+</div>

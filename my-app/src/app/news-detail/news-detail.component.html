@@ -1,0 +1,10 @@
+<div class="news-body" *ngIf="news">
+  <h3>{{news.title}}</h3>
+  <br />
+  <h6>{{news.meta}}</h6>
+  <br />
+  <p class="news-content" [innerHTML]="news.content"></p>
+  <div>
+    <a href="{{news.szurl}}">原文阅读</a>
+  </div>
+</div>

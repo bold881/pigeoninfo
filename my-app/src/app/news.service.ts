@@ -18,7 +18,9 @@ export class NewsService {
   private serverAddr = "http://127.0.0.1:4567"
   private newsUrl = "/newsofday";
   private newsDetailUrl = "/newsdetail";
-  private newsOfLimit = "/newsoflimit"
+  private newsOfLimit = "/newsoflimit";
+  private newsOfSearch = "/newsofsearch";
+
   static wsUrl = "ws://127.0.0.1:4567/echo";
 
   @Output() static change: EventEmitter<string> = new EventEmitter();
@@ -55,6 +57,14 @@ export class NewsService {
       .pipe(
       tap(sret => console.log(sret)),
       catchError(this.handleError('getNewsesOfLimit', []))
+      );
+  }
+
+  getNewsOfSearch(d: string): Observable<News[]> {
+    return this.http.post<News[]>(this.serverAddr + this.newsOfSearch, d, httpOptions)
+      .pipe(
+      tap(sret => console.log(sret)),
+      catchError(this.handleError('getNewsOfSearch', []))
       );
   }
 

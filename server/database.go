@@ -109,3 +109,22 @@ func GetNewsOfLimit(ts string) ([]News, error) {
 	}
 	return results, nil
 }
+
+func GetNewsOfSearch(ts string) ([]News, error) {
+	if session == nil {
+		return nil, errors.New("database session not initialized")
+	}
+	cs := session.Copy()
+	defer cs.Close()
+
+	c := cs.DB("pigeoninfo").C("news")
+
+	var results []News
+	m := bson.M{"title": bson.M{"$regex": bson.RegEx{ts, "i"}}}
+	err := c.Find(m).Sort("-time").All(&results)
+
+	if err != nil {
+		panic(err)
+	}
+	return results, nil
+}
