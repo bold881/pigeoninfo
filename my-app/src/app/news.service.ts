@@ -15,13 +15,13 @@ const httpOptions = {
 
 @Injectable()
 export class NewsService {
-  private serverAddr = "http://127.0.0.1:4567"
+  private serverAddr = "http://101.200.47.113:4567"
   private newsUrl = "/newsofday";
   private newsDetailUrl = "/newsdetail";
   private newsOfLimit = "/newsoflimit";
   private newsOfSearch = "/newsofsearch";
 
-  static wsUrl = "ws://127.0.0.1:4567/echo";
+  static wsUrl = "ws://101.200.47.113:4567/echo";
 
   @Output() static change: EventEmitter<string> = new EventEmitter();
 

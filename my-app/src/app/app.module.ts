@@ -13,6 +13,7 @@ import { NewsService } from './news.service';
 import { AppRoutingModule } from './/app-routing.module';
 import { NewsDetailComponent } from './news-detail/news-detail.component';
 import { SearchComponent } from './search/search.component';
+import { AboutComponent } from './about/about.component';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { SearchComponent } from './search/search.component';
     NewsComponent,
     NewsDetailComponent,
     SearchComponent,
+    AboutComponent,
   ],
   imports: [
     BrowserModule,
