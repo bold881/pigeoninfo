@@ -12,12 +12,13 @@ var (
 )
 
 type News struct {
-	ID      bson.ObjectId `bson:"_id,omitempty"`
-	Title   string        `json:"title"`
-	Meta    string        `json:"meta"`
-	Content string        `json:"content"`
-	Url     string        `json:"szurl"`
-	Time    time.Time     `json:"sztime"`
+	ID        bson.ObjectId `bson:"_id,omitempty"`
+	Title     string        `json:"title"`
+	Meta      string        `json:"meta"`
+	Content   string        `json:"content"`
+	Url       string        `json:"szurl"`
+	Time      time.Time     `json:"sztime"`
+	ViewCount int           `json:"viewcount"`
 }
 
 func getTimeByStr(s string) (tearly time.Time, tlate time.Time, err error) {
@@ -127,4 +128,21 @@ func GetNewsOfSearch(ts string) ([]News, error) {
 		panic(err)
 	}
 	return results, nil
+}
+
+func IncreaseNewsViewCount(id string) error {
+	if session == nil {
+		return errors.New("database session not initialized")
+	}
+
+	if id == "" {
+		return errors.New("id empty")
+	}
+	cs := session.Copy()
+	defer cs.Close()
+
+	c := cs.DB("pigeoninfo").C("news")
+
+	return c.Update(bson.M{"_id": bson.ObjectIdHex(id)},
+		bson.M{"$inc": bson.M{"viewcount": 1}})
 }

@@ -23,6 +23,13 @@ var (
 	recever    = "970778418@qq.com"
 )
 
+// clear logset
+func (logset *LogSet) Clear() {
+	logset.Lock()
+	logset.logs = nil
+	logset.Unlock()
+}
+
 // send logs by eamil
 func logProcess() {
 	for {
@@ -34,6 +41,7 @@ func logProcess() {
 		}
 		if tnow.Hour() == 23 && tnow.Minute() >= 30 {
 			msg := getEmailMsg(runninglog.logs)
+			runninglog.Clear()
 			if msg != nil {
 				mailsend(msg)
 			}

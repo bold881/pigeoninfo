@@ -15,13 +15,14 @@ const httpOptions = {
 
 @Injectable()
 export class NewsService {
-  private serverAddr = "http://101.200.47.113:4567"
+  private serverAddr = "http://127.0.0.1:4567"
   private newsUrl = "/newsofday";
   private newsDetailUrl = "/newsdetail";
   private newsOfLimit = "/newsoflimit";
   private newsOfSearch = "/newsofsearch";
+  private newsViewCountIncrease = "/incviewcount";
 
-  static wsUrl = "ws://101.200.47.113:4567/echo";
+  static wsUrl = "ws://127.0.0.1:4567/echo";
 
   @Output() static change: EventEmitter<string> = new EventEmitter();
 
@@ -66,6 +67,11 @@ export class NewsService {
       tap(sret => console.log(sret)),
       catchError(this.handleError('getNewsOfSearch', []))
       );
+  }
+
+  increaseNewsViewCount(d: string) {
+    return this.http.post(this.serverAddr + this.newsViewCountIncrease, d, httpOptions)
+      .subscribe(res => console.log(res));
   }
 
   initNewsWebsocket() {

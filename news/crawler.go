@@ -76,6 +76,9 @@ func (p *CQXinhuaObj) pageProcess(szurl string, doc *goquery.Document, chPI chan
 }
 
 func (p *CQQQObj) pageProcess(szurl string, doc *goquery.Document, chPI chan PageItem) {
+	if doc == nil {
+		return
+	}
 	doc.Find(".qq_article").Each(func(i int, s *goquery.Selection) {
 		// For each item found, get the band and title
 		title := s.Find(".hd").Find("h1").Text()

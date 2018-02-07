@@ -1,7 +1,7 @@
 <div class="news-body" *ngIf="news">
   <h3>{{news.title}}</h3>
   <br />
-  <h6>{{news.meta}}</h6>
+  <h6>{{news.meta}}  |  {{news.viewcount}}次阅读  |</h6>
   <br />
   <p class="news-content" [innerHTML]="news.content"></p>
   <div>

@@ -8,8 +8,8 @@ import (
 	"time"
 )
 
-var serverAddr = "0.0.0.0"
-var reportPath = "http://0.0.0.0:4567/newsitem"
+var serverAddr = "101.200.47.113"
+var reportPath = "http://101.200.47.113:4567/newsitem"
 
 func save(ch2Save chan PageItem, pIs PageItems, s *mgo.Session) {
 	for {

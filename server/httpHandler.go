@@ -116,3 +116,19 @@ func newsofSearch(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Allow", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
 	w.Write(retb)
 }
+
+func newsViewCountIncrease(w http.ResponseWriter, req *http.Request) {
+	bodyBytes, err := ioutil.ReadAll(req.Body)
+	bodyStr := string(bodyBytes)
+	log.Println(bodyStr)
+	runninglog.logs = append(runninglog.logs, bodyStr)
+	err = IncreaseNewsViewCount(bodyStr)
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.WriteHeader(http.StatusOK)
+}

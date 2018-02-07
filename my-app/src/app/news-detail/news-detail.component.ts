@@ -31,6 +31,8 @@ export class NewsDetailComponent implements OnInit {
       .subscribe(news => {
         NewsDetailComponent.newsReformat(news);
         this.news = news;
+
+        this.newsService.increaseNewsViewCount(news.ID);
       });
   }
 

@@ -5,6 +5,7 @@ export class News {
     content: string;
     szurl: string;
     sztime: Date;
+    viewcount: number;
 }
 
 export class NewsLite {
