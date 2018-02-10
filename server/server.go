@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	MGOADDR          = "127.0.0.1"
+	MGOADDR          = "101.200.47.113"
 	newsItemLiteChan = make(chan []byte, 1000)
 )
 
@@ -59,6 +59,14 @@ func (h MyHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	} else if req.URL.Path == "/incviewcount" {
 		if req.Method == "POST" {
 			newsViewCountIncrease(w, req)
+		} else {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+	} else if req.URL.Path == "/wx" {
+		if req.Method == "GET" {
+			log.Println(req.URL)
+			wxHandle(w, req)
 		} else {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			return
